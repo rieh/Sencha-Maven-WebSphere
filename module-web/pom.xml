@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <artifactId>extjs6-web</artifactId>
+      <groupId>com.example</groupId>
+      <version>1.0.0</version>
+   </parent>
+
+   <artifactId>module-web</artifactId>
+   <packaging>war</packaging>
+
+   <properties>
+		<build.dir>${basedir}/target/extjs</build.dir>
+		<sencha.working.dir>${basedir}/src/main/webapp/extjs</sencha.working.dir>
+	</properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>com.example</groupId>
+         <artifactId>module-ejb</artifactId>
+         <type>ejb</type>
+         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+			<configuration>
+				<webResources>
+					<resource>
+					  <!-- this is relative to the pom.xml directory -->
+					  <directory>${basedir}/target/extjs</directory>
+					</resource>
+				</webResources>
+				<!-- this worked too <warSourceExcludes>/extjs/**</warSourceExcludes-->
+				<warSourceExcludes>extjs/**</warSourceExcludes>
+			</configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+  <profiles>
+      <!-- production profile -->
+      <profile>
+          <id>production</id>
+          <activation>
+              <property>
+                  <name>env</name>
+                  <value>production</value>
+              </property>
+          </activation>
+          <properties>
+              <sencha.env>production</sencha.env>
+          </properties>
+		  <build>
+			<plugins>
+			  <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+				  <execution>
+					<id>sencha-compile</id>
+					<phase>compile</phase>
+					<goals>
+					  <goal>exec</goal>
+					</goals>
+					<configuration>
+					  <executable>${sencha.exe}</executable>
+					  <workingDirectory>${sencha.working.dir}</workingDirectory>
+					  <arguments>
+						<argument>app</argument>
+						<argument>build</argument>
+						<argument>--clean</argument>
+						<argument>--destination</argument>
+						<argument>${build.dir}</argument>
+						<argument>--environment</argument>
+						<argument>${sencha.env}</argument>
+					  </arguments>
+					</configuration>
+				  </execution>
+				</executions>
+			  </plugin>
+			</plugins>
+		  </build>
+      </profile>
+      <!-- development profile - TODO: will just copy over the files to facilitate debugging-->
+  </profiles>
+
+</project>

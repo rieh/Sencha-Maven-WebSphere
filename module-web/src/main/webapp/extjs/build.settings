@@ -1,0 +1,7 @@
+{
+    "webBuild": {
+        "environment": "testing",
+        "clean": "on",
+        "publishPath": "C:\\Users\\umesh.prabakar\\Downloads\\sencha\\sencha-architect\\built\\CarListings"
+    }
+}

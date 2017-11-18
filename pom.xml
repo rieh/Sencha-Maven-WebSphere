@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.example</groupId>
+   <artifactId>extjs6-web</artifactId>
+   <version>1.0.0</version>
+   <packaging>pom</packaging>
+   <name>ExtJS6 Web Application</name>
+
+   <modules>
+      <module>module-ejb</module>
+      <module>module-web</module>
+      <module>module-ear</module>
+   </modules>
+
+   <properties>
+		<sencha.cmd.dir>C:/ext-6/SenchaCmd-6.5.1-windows-64bit/6.5.1.240</sencha.cmd.dir>
+		<sencha.exe>${sencha.cmd.dir}/sencha.exe</sencha.exe>
+		<sencha.sdk.dir>C:/ext-6/ext-framework/ext-6.5.1</sencha.sdk.dir>
+		<!-- default sencha cmd build environment -->
+		<sencha.env>development</sencha.env>
+		
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- dependency versions -->
+		<junit.version>4.11</junit.version>
+		<log4j.version>1.2.17</log4j.version>
+		<jdk.version>1.8</jdk.version>
+		<ejb.version>3.1</ejb.version>
+		<javaee.api.version>7.0</javaee.api.version>
+		<!-- plugin versions -->
+		<compiler.plugin.version>3.3</compiler.plugin.version>
+		<ejb.plugin.version>2.5.1</ejb.plugin.version>
+		<ear.plugin.version>2.10.1</ear.plugin.version>
+		<war.plugin.version>2.6</war.plugin.version>
+	</properties>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>module-ejb</artifactId>
+            <version>1.0.0</version>
+            <type>ejb</type>
+         </dependency>
+
+         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>module-web</artifactId>
+            <version>1.0.0</version>
+            <type>war</type>
+            <scope>compile</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${javaee.api.version}</version>
+            <scope>provided</scope>
+         </dependency>
+
+      </dependencies>
+   </dependencyManagement>
+
+   <build>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <version>${compiler.plugin.version}</version>
+               <configuration>
+                  <source>${jdk.version}</source>
+                  <target>${jdk.version}</target>
+               </configuration>
+            </plugin>
+
+            <plugin>
+               <artifactId>maven-ejb-plugin</artifactId>
+               <version>${ejb.plugin.version}</version>
+               <configuration>
+                  <ejbVersion>${ejb.version}</ejbVersion>
+               </configuration>
+            </plugin>
+
+            <plugin>
+               <artifactId>maven-war-plugin</artifactId>
+               <version>${war.plugin.version}</version>
+               <configuration>
+                  <failOnMissingWebXml>false</failOnMissingWebXml>
+               </configuration>
+            </plugin>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-ear-plugin</artifactId>
+               <version>${ear.plugin.version}</version>
+               <configuration>
+                  <version>7</version>
+                  <modules>
+                     <webModule>
+                        <groupId>com.example</groupId>
+                        <artifactId>module-web</artifactId>
+                        <contextRoot>/</contextRoot>
+                     </webModule>
+                  </modules>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
+
+   <profiles>
+      <profile>
+         <id>unpack</id>
+         <build>
+            <pluginManagement>
+               <plugins>
+                  <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-ear-plugin</artifactId>
+                     <configuration>
+                        <unpackTypes>war,ejb</unpackTypes>
+                    </configuration>
+                  </plugin>
+               </plugins>
+            </pluginManagement>
+         </build>
+      </profile>
+   </profiles>
+
+</project>
